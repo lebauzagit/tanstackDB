@@ -1,0 +1,15 @@
+node_modules/
+dist/
+.pnpm-store/
+.codebase-memory/
+coverage/
+*.local
+*.tsbuildinfo
+.DS_Store
+.env
+.env.*
+!.env.example
+!.env.sample
+.aws/
+.codex/
+*.log
