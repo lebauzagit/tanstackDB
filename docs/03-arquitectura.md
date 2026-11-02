@@ -1,6 +1,6 @@
 # Arquitectura propuesta
 
-Este documento define el diseño del recorrido. La base Vue y las lecciones 01–05 están implementadas, instaladas y verificadas automáticamente y en navegador. Véanse la [revisión visual](09-revision-visual.md), el CRUD/persistencia de [04](10-estado-leccion-04.md) y la API simulada de [05](11-estado-leccion-05.md). Las lecciones 06–10 siguen planificadas. Las rutas, funciones y contratos HTTP propuestos son propios de Taller DB.
+Este documento define el diseño del recorrido. La base Vue y las lecciones 01–06 están implementadas. Véanse la [revisión visual](09-revision-visual.md), el CRUD/persistencia de [04](10-estado-leccion-04.md), la API simulada de [05](11-estado-leccion-05.md) y los errores/recuperación de [06](12-estado-leccion-06.md) para sus verificaciones. Las lecciones 07–10 siguen planificadas. Las rutas, funciones y contratos HTTP propuestos son propios de Taller DB.
 
 ## Decisiones de base
 
@@ -81,7 +81,8 @@ Al reiniciar: bloquear temporalmente controles, abortar peticiones, desmontar co
 | `useVueTaskExample()` | Sin argumentos; semilla Vue independiente | Alternativa didáctica con `ref` y `computed`, sin duplicar las filas de DB |
 | `useTasks()` | Colección concreta de la lección 04 | Consulta viva de tareas ordenadas por ID |
 | `useTaskActions()` | Colección concreta de la lección 04 | Validar título, crear, editar, alternar estado y eliminar; esperar settlement |
-| `useRemoteTasks()` | Sesión concreta de la lección 05 | Consulta viva, alternar estado con settlement, lectura manual y errores HTTP |
+| `useRemoteTasks()` | Sesión HTTP concreta de 05 o 06 | Consulta viva, settlement, lectura manual y distinción entre rechazo e incertidumbre |
+| `useFailureScenarios()` | Sesión concreta de 06 | Preparar fallos de una petición y explicar el resultado observable |
 | `useLabInspector()` | Estado autoritativo del mock | Leer datos, peticiones y cronología independientes de DB |
 | `useProjectBoard()` | sesión y proyecto reactivo | Proyección relacional para el tablero |
 | `useProjectMetrics()` | sesión y alcance | Métricas con cobertura explícita |
@@ -100,6 +101,8 @@ En la lección 04, `StoragePlayground.vue` posee dos fuentes independientes: Loc
 En 05, `RemotePlayground.vue` espera el arranque diferido del worker y posee una sesión concreta con QueryClient, colección y API simulada. El lector recibe esa fuente estable. Reiniciar cierra el mock y aborta escrituras, desmonta el lector, cancela consultas y limpia la colección antes de recrearla. Rutas y query keys incluyen un ID nuevo. `TaskLab` conserva sus propios datos y publica cambios para el inspector, sin leer DB.
 
 Usar `MaybeRefOrGetter` solo donde aporte utilidad; comprobar cómo el adaptador sigue refs/getters. Evitar convertir una entrada reactiva en un valor fijo al crear el composable. No añadir watchers para duplicar filas en arrays.
+
+En 06, `ErrorPlayground.vue` conserva el mismo ciclo de vida sobre una sesión independiente. `createFailureSession` prepara el fallo inicial antes de crear la colección; `useFailureScenarios` coordina controles concretos del mock sin duplicar datos. La recuperación de primera carga usa `reload()` sobre la consulta viva para recuperar también su lector. Con filas disponibles se usa refetch y se conserva el último resultado tras un GET fallido. Una escritura incierta bloquea nuevas escrituras hasta leer con éxito. Los fallos se consumen al inicio de una petición y el reinicio los descarta.
 
 ## Modelo evolutivo
 
@@ -120,7 +123,7 @@ Las primeras lecciones solo usan los tres campos iniciales de Task. El mock remo
 
 Base propuesta: `/api/lab/:sessionId`. Todas las rutas son de este proyecto.
 
-Estado actual de 05: solo GET `/tasks` con `{ items, total }` y PATCH `/tasks/:id` con `{ completed: boolean }`, que devuelve la tarea confirmada. La tabla siguiente describe la ampliación prevista; filtros, `expectedVersion`, autenticación y operaciones coordinadas no están implementados en esta lección.
+Estado actual de 05–06: solo GET `/tasks` con `{ items, total }` y PATCH `/tasks/:id` con `{ completed: boolean }`, que devuelve la tarea confirmada. En 06 se pueden provocar 422 antes de escribir y 503 al leer. La tabla siguiente describe la ampliación prevista; filtros, `expectedVersion`, autenticación y operaciones coordinadas no están implementados en estas lecciones.
 
 | Método y ruta relativa | Contrato |
 | --- | --- |

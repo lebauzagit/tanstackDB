@@ -12,6 +12,7 @@ export interface LabRequest {
   path: string
   latency: number
   status: 'pending' | 'success' | 'rejected' | 'aborted'
+  httpStatus?: number
 }
 
 const labs = new Map<string, TaskLab>()
@@ -32,6 +33,8 @@ export class TaskLab {
   private history: LabEvent[] = []
   private traffic: LabRequest[] = []
   private latency = 0
+  private nextReadFails = false
+  private nextWriteFailure: 'reject' | 'confirmation' | null = null
   active = true
 
   constructor() {
@@ -49,6 +52,41 @@ export class TaskLab {
   }
   get latencyMs() {
     return this.latency
+  }
+  get faults() {
+    return { read: this.nextReadFails, write: this.nextWriteFailure }
+  }
+
+  failNextRead() {
+    this.nextReadFails = true
+    this.record(
+      'api',
+      'Preparado: la próxima lectura GET fallará una sola vez.',
+    )
+  }
+
+  failNextWrite(mode: 'reject' | 'confirmation') {
+    this.nextWriteFailure = mode
+    this.record(
+      'api',
+      mode === 'reject'
+        ? 'Preparado: la próxima escritura PATCH será rechazada sin commit.'
+        : 'Preparado: el próximo PATCH se aceptará, pero fallará su lectura de confirmación.',
+    )
+  }
+
+  consumeReadFailure() {
+    const fail = this.nextReadFails
+    this.nextReadFails = false
+    this.notify()
+    return fail
+  }
+
+  consumeWriteFailure() {
+    const failure = this.nextWriteFailure
+    this.nextWriteFailure = null
+    this.notify()
+    return failure
   }
 
   subscribe(listener: () => void) {
@@ -92,9 +130,12 @@ export class TaskLab {
     return request
   }
 
-  finishRequest(id: number, status: LabRequest['status']) {
+  finishRequest(id: number, status: LabRequest['status'], httpStatus?: number) {
     const request = this.traffic.find((item) => item.id === id)
-    if (request) request.status = status
+    if (request) {
+      request.status = status
+      request.httpStatus = httpStatus
+    }
     this.notify()
   }
 

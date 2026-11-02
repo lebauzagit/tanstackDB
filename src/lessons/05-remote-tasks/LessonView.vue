@@ -12,6 +12,7 @@ import workerSource from '../../mocks/browser.ts?raw'
 import sessionSource from './RemotePlayground.vue?raw'
 import viewSource from './RemoteTasks.vue?raw'
 import inspectorSource from './useLabInspector.ts?raw'
+import trafficSource from '../../components/learning/LabTraffic.vue?raw'
 
 const codeTab = ref(0)
 const files = [
@@ -40,6 +41,7 @@ const files = [
     filename: 'useLabInspector.ts',
     source: inspectorSource,
   },
+  { title: 'Registro HTTP', filename: 'LabTraffic.vue', source: trafficSource },
 ]
 </script>
 
@@ -185,15 +187,15 @@ const files = [
         Para conectar una colección a una API mediante lecturas y handlers de
         escritura explícitos. Aquí todo lo remoto está simulado con MSW y se
         reinicia al recargar. No hay autorización, respaldo remoto ni trabajo
-        offline duradero. Los controles de fallo se incorporarán en la lección
-        06.
+        offline duradero. La lección 06 añade controles deterministas para
+        estudiar errores y recuperación.
       </p>
     </section>
     <div class="lesson-end">
       <RouterLink class="text-link" to="/lessons/04-storage"
         >← Lección 04: CRUD y almacenamiento</RouterLink
-      ><span class="quiet"
-        >Próxima práctica: errores y rollback · En preparación</span
+      ><RouterLink class="text-link" to="/lessons/06-errors"
+        >Lección 06: errores y recuperación →</RouterLink
       >
     </div>
   </article>

@@ -130,6 +130,7 @@ describe('Query Collection RC1 y HTTP simulado', () => {
     ).toBe(true)
     expect(session.lab.tasks).toEqual(original)
     expect(rows(wrapper)).toHaveLength(3)
+    expect(wrapper.findAll('.task-list li')).toHaveLength(3)
   })
 
   it('reinicia durante un PATCH y las respuestas antiguas no contaminan la sesión nueva', async () => {
@@ -220,6 +221,7 @@ describe('Query Collection RC1 y HTTP simulado', () => {
     )
     expect(session.lab.tasks[1]!.completed).toBe(true)
     expect(rows(wrapper)).toHaveLength(3)
+    expect(wrapper.findAll('.task-list li')).toHaveLength(3)
     mockServer.resetHandlers()
     await wrapper.get('button').trigger('click')
     await vi.waitFor(() => expect(rows(wrapper)[1]!.completed).toBe(true))

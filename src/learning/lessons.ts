@@ -33,7 +33,7 @@ export const lessons = [
     number: '06',
     title: 'Romperlo para entenderlo',
     level: 'Intermedio',
-    path: null,
+    path: '/lessons/06-errors',
   },
   {
     number: '07',

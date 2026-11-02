@@ -35,10 +35,19 @@ export const handlers = [
     if (!lab)
       return HttpResponse.json({ code: 'SESSION_NOT_FOUND' }, { status: 404 })
     const entry = lab.beginRequest('GET', new URL(request.url).pathname)
+    const fail = lab.consumeReadFailure()
     if (!(await wait(lab, request, entry)))
       return new HttpResponse(null, { status: 499 })
+    if (fail) {
+      lab.finishRequest(entry.id, 'rejected', 503)
+      lab.record(
+        'api',
+        'GET rechazado con 503 por el fallo preparado. Los datos del mock se conservan.',
+      )
+      return HttpResponse.json({ code: 'LAB_READ_FAILED' }, { status: 503 })
+    }
     const items = lab.tasks
-    lab.finishRequest(entry.id, 'success')
+    lab.finishRequest(entry.id, 'success', 200)
     lab.record(
       'api',
       'Respuesta GET emitida desde el estado independiente del mock.',
@@ -52,6 +61,7 @@ export const handlers = [
       if (!lab)
         return HttpResponse.json({ code: 'SESSION_NOT_FOUND' }, { status: 404 })
       const entry = lab.beginRequest('PATCH', new URL(request.url).pathname)
+      const failure = lab.consumeWriteFailure()
       if (!(await wait(lab, request, entry)))
         return new HttpResponse(null, { status: 499 })
       let body: unknown
@@ -67,17 +77,35 @@ export const handlers = [
         typeof body.completed !== 'boolean' ||
         Object.keys(body).some((key) => key !== 'completed')
       ) {
-        lab.finishRequest(entry.id, 'rejected')
+        lab.finishRequest(entry.id, 'rejected', 400)
         return HttpResponse.json(
           { code: 'INVALID_TASK_CHANGE' },
           { status: 400 },
         )
       }
       // La comprobación de sesión y el commit no tienen esperas intermedias.
-      if (!lab.active || request.signal.aborted)
+      if (!lab.active || request.signal.aborted) {
+        lab.finishRequest(entry.id, 'aborted')
         return new HttpResponse(null, { status: 499 })
+      }
+      if (failure === 'reject') {
+        lab.finishRequest(entry.id, 'rejected', 422)
+        lab.record(
+          'api',
+          'PATCH rechazado con 422 antes del commit. Ninguna tarea cambió en el mock.',
+        )
+        return HttpResponse.json(
+          { code: 'LAB_WRITE_REJECTED' },
+          { status: 422 },
+        )
+      }
       const task = lab.updateTask(String(params.taskId), body.completed)
-      lab.finishRequest(entry.id, task ? 'success' : 'rejected')
+      if (task && failure === 'confirmation') lab.failNextRead()
+      lab.finishRequest(
+        entry.id,
+        task ? 'success' : 'rejected',
+        task ? 200 : 404,
+      )
       return task
         ? HttpResponse.json(task)
         : HttpResponse.json({ code: 'TASK_NOT_FOUND' }, { status: 404 })

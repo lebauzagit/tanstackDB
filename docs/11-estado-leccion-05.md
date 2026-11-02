@@ -1,6 +1,6 @@
 # Estado de la lección 05
 
-Fecha: 1 de noviembre de 2026. **Implementada, verificada automáticamente y revisada en Chrome DevTools.** Ruta: `/lessons/05-remote-tasks`. El hito 3 sigue abierto: falta la lección 06 y sus controles de fallo.
+Fecha: 1 de noviembre de 2026. **Implementada, verificada automáticamente y revisada en Chrome DevTools.** Ruta: `/lessons/05-remote-tasks`. Este registro describe la entrega inicial de 05; su continuación está documentada en la [lección 06](12-estado-leccion-06.md).
 
 ## Qué enseña
 
@@ -61,6 +61,6 @@ Parte de las acciones se activó mediante DOM desde `evaluate_script`; se inspec
 
 ## Versionado y siguiente entrega
 
-La base 01–04 está en `main`, commit `648e18c`, etiqueta `v0.1.0`, en el repositorio privado [lebauzagit/tanstackDB](https://github.com/lebauzagit/tanstackDB). La lección 05 se trabaja en `feat/lesson-05-api`.
+La base 01–04 está en `main`, commit `648e18c`, etiqueta `v0.1.0`, en el repositorio privado [lebauzagit/tanstackDB](https://github.com/lebauzagit/tanstackDB). La lección 05 se integró mediante la [PR #1](https://github.com/lebauzagit/tanstackDB/pull/1), merge `c583a3f92c601d6687e0e74b8defaba25881429e`.
 
-La siguiente entrega es la lección 06: controles deterministas para rechazar escrituras, fallar primera carga y lectura posterior, explicar rollback y recuperar sin duplicar operaciones. No están implementados como una lección independiente todavía.
+La continuación implementada es la [lección 06](12-estado-leccion-06.md): controles deterministas para rechazar escrituras, fallar primera carga y lectura posterior, explicar rollback y recuperar sin duplicar operaciones. Comparte acciones HTTP e inspector con 05, con sesiones independientes.

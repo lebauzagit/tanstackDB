@@ -7,7 +7,9 @@
 - [x] Verificar paquetes y crear aplicación Vue.
 - [ ] Implementar y validar los hitos siguientes.
 
-La base Vue y las lecciones 01–05 pasan las comprobaciones automáticas (cincuenta pruebas), typecheck, lint y build. Los hitos 1 y 2 están completos; el hito 3 tiene implementada y revisada la lección 05 y conserva pendiente 06. Véanse los registros del [hito 1](06-estado-hito-1.md), la [lección 02](07-estado-leccion-02.md), la [lección 03](08-estado-leccion-03.md), la [revisión visual](09-revision-visual.md), la [lección 04](10-estado-leccion-04.md) y la [lección 05](11-estado-leccion-05.md).
+La base Vue y las lecciones 01–06 pasan las comprobaciones automáticas (sesenta pruebas), typecheck, lint y build. Véanse los registros del [hito 1](06-estado-hito-1.md), la [lección 02](07-estado-leccion-02.md), la [lección 03](08-estado-leccion-03.md), la [revisión visual](09-revision-visual.md), la [lección 04](10-estado-leccion-04.md), la [lección 05](11-estado-leccion-05.md) y la [lección 06](12-estado-leccion-06.md) para su estado y límites. La próxima implementación corresponde al hito 4, empezando por 07.
+
+Los hitos 1–3 están completos. La revisión de 06 cubre escritorio/móvil en desarrollo; el worker en Vite Preview se verificó en la entrega 05.
 
 ### Avance del hito 1
 
@@ -53,7 +55,9 @@ Implementar lecciones 02–04, estructura didáctica reutilizable y navegación.
 - [x] Inspector de API independiente, peticiones y cronología.
 - [x] Cancelación/reinicio con petición en vuelo, aislamiento y recuperación de errores cubiertos automáticamente.
 - [x] Revisión en escritorio/móvil y del build estático con worker real.
-- [ ] Lección 06: controles deterministas de fallo y recorrido guiado de rollback/recuperación.
+- [x] Lección 06: controles deterministas de fallo y recorrido guiado de rollback/recuperación.
+- [x] Primera carga con dos fallos consecutivos y recuperación del lector, rechazo 422, GET 503 sin vaciar filas y confirmación fallida sin duplicar PATCH cubiertos por pruebas.
+- [x] Revisión de 06 en escritorio/móvil con worker real y recuperación mediante Enter.
 
 Implementar API simulada, Query Collection, cliente HTTP y lecciones 05–06. Añadir cronología y controles de fallo. Fijar políticas de reintento para que el comportamiento sea reproducible.
 

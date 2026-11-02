@@ -36,6 +36,11 @@ export const router = createRouter({
       meta: { title: 'La API tarda, la interfaz responde' },
     },
     {
+      path: '/lessons/06-errors',
+      component: () => import('../lessons/06-errors/LessonView.vue'),
+      meta: { title: 'Romperlo para entenderlo' },
+    },
+    {
       path: '/:pathMatch(.*)*',
       component: NotFoundView,
       meta: { title: 'Página no encontrada' },

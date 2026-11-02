@@ -8,14 +8,14 @@ vi.mock('../mocks/browser', () => ({ ensureMockApi: async () => {} }))
 beforeAll(() => mockServer.listen({ onUnhandledRequest: 'error' }))
 afterAll(() => mockServer.close())
 
-it('recorre las cinco lecciones disponibles y vuelve a la primera', async () => {
+it('recorre las seis lecciones disponibles y vuelve a la primera', async () => {
   // jsdom no implementa el desplazamiento de la ventana.
   vi.spyOn(window, 'scrollTo').mockImplementation(() => {})
   await router.push('/')
   const wrapper = mount(App, { global: { plugins: [router] } })
   try {
     await router.isReady()
-    expect(wrapper.get('.section-heading').text()).toContain('5 de 10')
+    expect(wrapper.get('.section-heading').text()).toContain('6 de 10')
     await wrapper
       .get('.roadmap a[href="/lessons/02-filtered-tasks"]')
       .trigger('click')
@@ -48,6 +48,17 @@ it('recorre las cinco lecciones disponibles y vuelve a la primera', async () => 
       expect(wrapper.get('h1').text()).toContain('La API tarda'),
     )
     expect(router.currentRoute.value.path).toBe('/lessons/05-remote-tasks')
+    await wrapper
+      .get('.lesson-end a[href="/lessons/06-errors"]')
+      .trigger('click')
+    await vi.waitFor(() =>
+      expect(wrapper.get('h1').text()).toContain('Romperlo'),
+    )
+    expect(router.currentRoute.value.path).toBe('/lessons/06-errors')
+    await wrapper
+      .get('.lesson-end a[href="/lessons/05-remote-tasks"]')
+      .trigger('click')
+    await flushPromises()
     await wrapper
       .get('.lesson-end a[href="/lessons/04-storage"]')
       .trigger('click')

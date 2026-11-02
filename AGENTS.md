@@ -4,7 +4,7 @@
 
 Este proyecto enseña TanStack DB 1.0.0-rc.1 con Vue 3, TypeScript y composables. La claridad pedagógica es un requisito funcional. Un CRUD que funciona pero no explica su flujo de datos está incompleto.
 
-La base Vue y las lecciones 01–05 están instaladas y pasan typecheck, lint, cincuenta pruebas y build. Las cinco tienen revisión de escritorio/móvil; 05 también se verificó en Vite Preview con el worker real. Los hitos 1 y 2 están completos; el hito 3 conserva pendiente la lección 06. Lee los registros del [hito 1](docs/06-estado-hito-1.md), la [lección 02](docs/07-estado-leccion-02.md), la [lección 03](docs/08-estado-leccion-03.md), el [informe visual](docs/09-revision-visual.md), la [lección 04](docs/10-estado-leccion-04.md) y la [lección 05](docs/11-estado-leccion-05.md). No describas comprobaciones pendientes como realizadas ni lecciones futuras como implementadas.
+La base Vue y las lecciones 01–06 están instaladas y pasan typecheck, lint, sesenta pruebas y build. Consulta los registros para distinguir su revisión visual y límites. Lee los registros del [hito 1](docs/06-estado-hito-1.md), la [lección 02](docs/07-estado-leccion-02.md), la [lección 03](docs/08-estado-leccion-03.md), el [informe visual](docs/09-revision-visual.md), la [lección 04](docs/10-estado-leccion-04.md), la [lección 05](docs/11-estado-leccion-05.md) y la [lección 06](docs/12-estado-leccion-06.md). No describas comprobaciones pendientes como realizadas ni lecciones futuras como implementadas.
 
 Lee antes de implementar, en este orden:
 
@@ -26,6 +26,7 @@ Lee antes de implementar, en este orden:
 - Cada lección debe poder reiniciarse sin alterar los datos de otras lecciones.
 - La lección 04 usa solo `taller-db:lesson-04:tasks:v1` para persistencia. Conserva la diferencia entre clave ausente y lista guardada vacía; no uses `localStorage.clear()` ni sustituyas fallos de almacenamiento por memoria sin indicarlo.
 - La API de 05 es una simulación MSW con estado propio, identificada en pantalla. Arranca bajo demanda, también en el build estático. Conserva IDs de sesión en rutas/caché, abortos y la separación entre datos de DB y del mock. No atribuyas confirmación remota únicamente a `$hasPendingWrites` o a la casilla marcada.
+- 06 reutiliza esa configuración con sesiones independientes y fallos de una sola petición. Conserva los datos tras un GET fallido y el bloqueo de escrituras inciertas hasta verificar mediante GET. Para recuperar la primera carga, recarga la consulta viva, no únicamente su fuente. Un crash interno requiere reinicio completo y no se debe confundir con un error recuperable de carga.
 
 ## Reglas de implementación
 

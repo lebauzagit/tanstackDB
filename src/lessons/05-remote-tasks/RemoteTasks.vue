@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { computed, nextTick } from 'vue'
+import { computed, nextTick, useTemplateRef } from 'vue'
+import LabTraffic from '../../components/learning/LabTraffic.vue'
 import type { RemoteSession } from './collections'
 import { useRemoteTasks } from './useRemoteTasks'
 import { useLabInspector } from './useLabInspector'
@@ -13,6 +14,7 @@ const {
   writing,
   reading,
   errorMessage,
+  needsVerification,
   toggleTask,
   readAgain,
 } = useRemoteTasks(session)
@@ -33,20 +35,22 @@ const serverJson = computed(() => JSON.stringify(serverTasks.value, null, 2))
 const pendingRequests = computed(
   () => requests.value.filter((request) => request.status === 'pending').length,
 )
-const statusLabels = {
-  pending: 'En curso',
-  success: 'Respondida',
-  rejected: 'Rechazada',
-  aborted: 'Cancelada',
-}
+const readButton = useTemplateRef<HTMLButtonElement>('read-button')
 
 async function toggle(id: string, event: Event) {
   const input = event.currentTarget as HTMLInputElement
   const hadFocus = document.activeElement === input
   await toggleTask(id)
   await nextTick()
-  if (hadFocus && input.isConnected && document.activeElement === document.body)
-    input.focus()
+  if (
+    hadFocus &&
+    input.isConnected &&
+    (document.activeElement === document.body ||
+      document.activeElement === input)
+  ) {
+    if (needsVerification.value) readButton.value?.focus()
+    else input.focus()
+  }
 }
 </script>
 
@@ -54,9 +58,7 @@ async function toggle(id: string, event: Event) {
   <div class="remote-summary" role="status">
     <span
       >{{ requests.length }}
-      {{
-        requests.length === 1 ? 'petición recibida' : 'peticiones recibidas'
-      }}
+      {{ requests.length === 1 ? 'petición recibida' : 'peticiones recibidas' }}
       por el mock · {{ pendingRequests }} en curso</span
     >
     <strong>{{
@@ -74,14 +76,16 @@ async function toggle(id: string, event: Event) {
       <p class="quiet">
         El cambio optimista aparece antes de la respuesta HTTP.
       </p>
-      <p v-if="isLoading" role="status">Cargando tareas por HTTP…</p>
       <p
-        v-else-if="isLoadingError || isCrashed"
+        v-if="(isLoadingError || isCrashed) && !tasks.length && !reading"
         class="error-message"
         role="alert"
       >
         No se pudo realizar la primera carga. Pulsa «Volver a leer la API» para
         reintentarlo.
+      </p>
+      <p v-else-if="(isLoading || reading) && !tasks.length" role="status">
+        Cargando tareas por HTTP…
       </p>
       <ul v-else class="task-list" aria-label="Tareas remotas">
         <li
@@ -93,7 +97,7 @@ async function toggle(id: string, event: Event) {
             ><input
               type="checkbox"
               :checked="task.completed"
-              :disabled="writing || reading"
+              :disabled="writing || reading || needsVerification"
               @change="toggle(task.id, $event)"
             /><span>{{ task.title }}</span></label
           >
@@ -104,9 +108,12 @@ async function toggle(id: string, event: Event) {
         {{ errorMessage }}
       </p>
       <button
+        ref="read-button"
         class="text-button"
         type="button"
-        :disabled="writing || reading || isLoading"
+        :disabled="
+          writing || reading || (isLoading && !isLoadingError && !isCrashed)
+        "
         @click="readAgain"
       >
         Volver a leer la API
@@ -142,50 +149,5 @@ async function toggle(id: string, event: Event) {
       </p>
     </section>
   </div>
-  <section class="request-inspector" aria-label="Peticiones de esta sesión">
-    <h3>Peticiones observadas</h3>
-    <p class="quiet">
-      Instrumentación del laboratorio; también puedes ver las peticiones en
-      Network.
-    </p>
-    <div class="request-table-scroll">
-      <table>
-        <caption>
-          HTTP recibido por la API simulada de esta sesión
-        </caption>
-        <thead>
-          <tr>
-            <th scope="col">N.º</th>
-            <th scope="col">Método</th>
-            <th scope="col">Latencia</th>
-            <th scope="col">Estado</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="request in requests" :key="request.id">
-            <td>{{ request.id }}</td>
-            <td>
-              <code>{{ request.method }}</code>
-            </td>
-            <td>{{ request.latency }} ms</td>
-            <td>{{ statusLabels[request.status] }}</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </section>
-  <section class="remote-timeline" aria-label="Cronología del laboratorio">
-    <h3>El recorrido del cambio</h3>
-    <p class="quiet">
-      Registro propio del laboratorio; no es una API de Devtools de TanStack DB.
-    </p>
-    <ol>
-      <li v-for="event in events" :key="event.id">
-        <span class="timeline-time"
-          >+{{ event.elapsed }} ms ·
-          {{ event.side === 'api' ? 'API simulada' : 'Cliente' }}</span
-        ><span>{{ event.message }}</span>
-      </li>
-    </ol>
-  </section>
+  <LabTraffic :requests="requests" :events="events" />
 </template>

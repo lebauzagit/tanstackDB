@@ -20,5 +20,9 @@ export function useLabInspector(lab: TaskLab) {
     void revision.value
     return lab.events
   })
-  return { serverTasks, requests, events }
+  const faults = computed(() => {
+    void revision.value
+    return lab.faults
+  })
+  return { serverTasks, requests, events, faults }
 }

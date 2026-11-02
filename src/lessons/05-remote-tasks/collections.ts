@@ -13,8 +13,10 @@ export class ReconciliationError extends Error {
   }
 }
 
-export function createRemoteSession() {
-  const lab = new TaskLab()
+export function createRemoteSession(
+  lessonId: 'lesson-05' | 'lesson-06' = 'lesson-05',
+  lab = new TaskLab(),
+) {
   const writes = new AbortController()
   const api = createTasksApi(lab.id)
   const queryClient = new QueryClient({
@@ -29,8 +31,8 @@ export function createRemoteSession() {
   })
   const collection = createCollection(
     queryCollectionOptions({
-      id: `lesson-05-${lab.id}`,
-      queryKey: ['lesson-05', lab.id, 'tasks'],
+      id: `${lessonId}-${lab.id}`,
+      queryKey: [lessonId, lab.id, 'tasks'],
       queryClient,
       queryFn: ({ signal }) => api.readTasks(signal),
       getKey: (task: Task) => task.id,

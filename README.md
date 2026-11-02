@@ -8,9 +8,9 @@ Repositorio privado: [lebauzagit/tanstackDB](https://github.com/lebauzagit/tanst
 
 ## Estado actual
 
-**Lecciones 01–05 implementadas y verificadas.** Incluyen primera colección, filtros reactivos, fuente compartida, CRUD/persistencia local y API HTTP simulada con latencia y escrituras optimistas. Las lecciones 06–10 aparecen como «En preparación».
+**Lecciones 01–06 implementadas y verificadas.** Incluyen primera colección, filtros reactivos, fuente compartida, CRUD/persistencia local, API HTTP simulada y errores controlados con rollback y recuperación. Las lecciones 07–10 aparecen como «En preparación».
 
-Las dependencias están instaladas y `pnpm-lock.yaml` conserva las versiones resueltas. Pasan typecheck, lint, las cincuenta pruebas y build. Las cinco lecciones se revisaron con Chrome DevTools en escritorio y móvil emulado. Los detalles de foco de 02/03 están corregidos; consulta el [informe de revisión](docs/09-revision-visual.md), la [lección 04](docs/10-estado-leccion-04.md) y la [lección 05](docs/11-estado-leccion-05.md).
+Las dependencias están instaladas y `pnpm-lock.yaml` conserva las versiones resueltas. Pasan typecheck, lint, las sesenta pruebas y build. Los registros de cada lección distinguen sus comprobaciones y límites; consulta el [informe de revisión](docs/09-revision-visual.md), la [lección 04](docs/10-estado-leccion-04.md), la [lección 05](docs/11-estado-leccion-05.md) y la [lección 06](docs/12-estado-leccion-06.md).
 
 ## Ejecutar el proyecto
 
@@ -39,6 +39,8 @@ La quinta está en `/lessons/05-remote-tasks`. Compara cliente y API simulada du
 
 El lockfile ya está generado y debe conservarse en el repositorio. Usa `pnpm install --frozen-lockfile` para reproducir las versiones verificadas.
 
+La sexta está en `/lessons/06-errors`. Permite preparar rechazos 422 y lecturas fallidas 503, comparar rollback local con el estado de la API y recuperar sin repetir una escritura aceptada. También distingue la primera carga fallida de una actualización fallida con datos ya disponibles.
+
 ## Comprobaciones
 
 ```powershell
@@ -48,7 +50,7 @@ pnpm test
 pnpm build
 ```
 
-Las cincuenta pruebas pasan. Cubren DB real, filtros, proyección, estado compartido, CRUD, persistencia local, HTTP simulado con MSW real, optimismo, reconciliación, rollback, errores, reinicio, aislamiento, navegación y foco. Consulta los registros del [hito 1](docs/06-estado-hito-1.md), la [lección 02](docs/07-estado-leccion-02.md), la [lección 03](docs/08-estado-leccion-03.md), la [revisión inicial en navegador](docs/09-revision-visual.md), la [lección 04](docs/10-estado-leccion-04.md) y la [lección 05](docs/11-estado-leccion-05.md) para distinguir las comprobaciones y sus límites.
+Las sesenta pruebas pasan. Cubren DB real, filtros, proyección, estado compartido, CRUD, persistencia local, HTTP simulado con MSW real, optimismo, reconciliación, rollback, errores, reinicio, aislamiento, navegación y foco. Consulta los registros del [hito 1](docs/06-estado-hito-1.md), la [lección 02](docs/07-estado-leccion-02.md), la [lección 03](docs/08-estado-leccion-03.md), la [revisión inicial en navegador](docs/09-revision-visual.md), la [lección 04](docs/10-estado-leccion-04.md), la [lección 05](docs/11-estado-leccion-05.md) y la [lección 06](docs/12-estado-leccion-06.md) para distinguir las comprobaciones y sus límites.
 
 ## La idea
 
@@ -77,6 +79,7 @@ En Taller DB aprenderemos esa frontera usando primero memoria local y después u
 | [Revisión en navegador](docs/09-revision-visual.md) | Escritorio, móvil, escenarios comprobados y mejoras de foco |
 | [Estado de la lección 04](docs/10-estado-leccion-04.md) | CRUD, persistencia local, recuperación y cierre del hito 2 |
 | [Estado de la lección 05](docs/11-estado-leccion-05.md) | HTTP simulado, latencia, reconciliación y cancelación |
+| [Estado de la lección 06](docs/12-estado-leccion-06.md) | Fallos deterministas, rollback y recuperación de primera carga y confirmación |
 | [Instrucciones del agente](AGENTS.md) | Cómo trabajar en este proyecto sin perder su propósito educativo |
 
 ## Decisiones iniciales
@@ -91,4 +94,4 @@ Son decisiones de diseño para este proyecto, no requisitos de TanStack DB. Las 
 
 ## Próxima entrega definida
 
-La siguiente lección del [plan](docs/04-plan-de-implementacion.md) es la 06: errores controlados, rollback y recuperación. Los hitos 1 y 2 están completos; el hito 3 tiene terminada la lección 05.
+La siguiente lección del [plan](docs/04-plan-de-implementacion.md) es la 07: relaciones entre proyectos, tareas y miembros. Los hitos 1–3 están completos; los registros de estado detallan sus verificaciones y límites.

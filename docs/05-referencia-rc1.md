@@ -47,7 +47,7 @@ La implementación debe documentar la firma realmente utilizada y validarla con 
 | Adaptador local persistido | `localStorageCollectionOptions` incluido en `@tanstack/db@1.0.0-rc.1`; verificado en lección 04 |
 | MSW | `2.15.0`, compatible con el peer de Vitest 4.1.10; worker oficial generado |
 
-**Estado:** versiones exactas instaladas y resueltas con `strict-peer-dependencies=true`, conservadas en `pnpm-lock.yaml`. Typecheck, lint, cincuenta pruebas y build pasan. Los registros del [hito 1](06-estado-hito-1.md), la [lección 02](07-estado-leccion-02.md), la [lección 03](08-estado-leccion-03.md), la [lección 04](10-estado-leccion-04.md) y la [lección 05](11-estado-leccion-05.md) detallan las comprobaciones. Los adaptadores de las lecciones futuras se verificarán al incorporarlos.
+**Estado:** versiones exactas instaladas y resueltas con `strict-peer-dependencies=true`, conservadas en `pnpm-lock.yaml`. Typecheck, lint, sesenta pruebas y build pasan. Los registros del [hito 1](06-estado-hito-1.md), la [lección 02](07-estado-leccion-02.md), la [lección 03](08-estado-leccion-03.md), la [lección 04](10-estado-leccion-04.md), la [lección 05](11-estado-leccion-05.md) y la [lección 06](12-estado-leccion-06.md) detallan las comprobaciones. Los adaptadores de las lecciones futuras se verificarán al incorporarlos.
 
 La lección 02 usa la sobrecarga Vue `useLiveQuery(queryFn, deps?)` con `[filter]`, donde `filter` es un `Ref<TaskFilter>`. Se contrastó con `node_modules/@tanstack/vue-db/src/useLiveQuery.ts` de RC1: el adaptador lee esas dependencias mediante `toValue` dentro de su resolución reactiva. Las pruebas cambian el filtro y conservan mutaciones previas sin remontar la práctica.
 
@@ -58,6 +58,8 @@ En la lección 04 se contrastó la [guía LocalStorage](https://tanstack.com/db/
 En 05 se contrastaron `query-db-collection/src/query.ts`, las propiedades virtuales y `reload()` del core RC1, además de las APIs publicadas de MSW 2.15.0. Se usan `queryCollectionOptions` con `createCollection`, un QueryClient concreto y refetch explícito dentro del handler. Las pruebas verifican `$hasPendingWrites` proyectado como `pending`, optimismo, reconciliación, fallo posterior al commit y recuperación sin repetir la escritura. El worker se espera antes de montar lectores y se activa también en el build del tutorial.
 
 ## Fuentes para implementar cada bloque
+
+En 06 se verificó además la recuperación de primera carga contra `collection/index.ts` y `vue-db/src/useLiveQuery.ts` de RC1: `query.collection.value.reload()` recarga las fuentes con error y después la consulta. Recargar solo la fuente no garantizaba recuperar el lector, aunque el HTTP terminara con 200. La prueba exige filas visibles después de dos fallos consecutivos. `reload()` no recupera crashes internos en el sitio; para ellos se puede reiniciar la sesión con cleanup de sus dependientes.
 
 | Fuente oficial | Uso |
 | --- | --- |
