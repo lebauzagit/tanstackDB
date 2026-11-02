@@ -31,6 +31,11 @@ export const router = createRouter({
       meta: { title: 'CRUD y almacenamiento' },
     },
     {
+      path: '/lessons/05-remote-tasks',
+      component: () => import('../lessons/05-remote-tasks/LessonView.vue'),
+      meta: { title: 'La API tarda, la interfaz responde' },
+    },
+    {
       path: '/:pathMatch(.*)*',
       component: NotFoundView,
       meta: { title: 'Página no encontrada' },

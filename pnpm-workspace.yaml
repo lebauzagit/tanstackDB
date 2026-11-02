@@ -1,0 +1,4 @@
+allowBuilds:
+  msw: true
+minimumReleaseAgeExclude:
+  - '@tanstack/query-core@5.105.1'

@@ -41,19 +41,21 @@ La implementación debe documentar la firma realmente utilizada y validarla con 
 | --- | --- |
 | `@tanstack/db` | Objetivo exacto `1.0.0-rc.1`; comprobar publicación |
 | `@tanstack/vue-db` | Versión publicada compatible con ese core; comprobar exports y peers |
-| `@tanstack/query-db-collection` | Versión 1.x compatible según guía; añadir en hito HTTP |
-| `@tanstack/query-core` | Versión que satisfaga peers y requisitos de recuperación del adaptador |
+| `@tanstack/query-db-collection` | `1.5.0`, instalado y verificado en 05; peer DB `^1.0.0-rc.0` |
+| `@tanstack/query-core` | `5.105.1`, satisface el peer `^5.90.15` del adaptador |
 | Vue, Vite, TypeScript y Vue Router | Versiones compatibles verificadas al crear el proyecto |
 | Adaptador local persistido | `localStorageCollectionOptions` incluido en `@tanstack/db@1.0.0-rc.1`; verificado en lección 04 |
-| MSW y herramientas de pruebas | Verificar versión y requisitos al incorporarlos |
+| MSW | `2.15.0`, compatible con el peer de Vitest 4.1.10; worker oficial generado |
 
-**Estado:** versiones exactas instaladas y resueltas con `strict-peer-dependencies=true`, conservadas en `pnpm-lock.yaml`. Typecheck, lint, cuarenta pruebas y build pasan. Los registros del [hito 1](06-estado-hito-1.md), la [lección 02](07-estado-leccion-02.md), la [lección 03](08-estado-leccion-03.md) y la [lección 04](10-estado-leccion-04.md) detallan las comprobaciones. Los adaptadores de las lecciones futuras se verificarán al incorporarlos.
+**Estado:** versiones exactas instaladas y resueltas con `strict-peer-dependencies=true`, conservadas en `pnpm-lock.yaml`. Typecheck, lint, cincuenta pruebas y build pasan. Los registros del [hito 1](06-estado-hito-1.md), la [lección 02](07-estado-leccion-02.md), la [lección 03](08-estado-leccion-03.md), la [lección 04](10-estado-leccion-04.md) y la [lección 05](11-estado-leccion-05.md) detallan las comprobaciones. Los adaptadores de las lecciones futuras se verificarán al incorporarlos.
 
 La lección 02 usa la sobrecarga Vue `useLiveQuery(queryFn, deps?)` con `[filter]`, donde `filter` es un `Ref<TaskFilter>`. Se contrastó con `node_modules/@tanstack/vue-db/src/useLiveQuery.ts` de RC1: el adaptador lee esas dependencias mediante `toValue` dentro de su resolución reactiva. Las pruebas cambian el filtro y conservan mutaciones previas sin remontar la práctica.
 
 La lección 03 reutiliza esa sobrecarga con fuentes concretas estables. Se comprobó en la fuente instalada que el hook libera su observador al desmontarse; la colección compartida se limpia solo al terminar su propietario. Las pruebas desmontan y remontan un lector mientras el otro sigue modificando los datos.
 
 En la lección 04 se contrastó la [guía LocalStorage](https://tanstack.com/db/latest/docs/collections/local-storage-collection), la [referencia de la fábrica](https://tanstack.com/db/latest/docs/reference/functions/localStorageCollectionOptions) y `node_modules/@tanstack/db/src/local-storage.ts` de RC1. La fábrica recibe `storageKey`, `storage` y `getKey`; el laboratorio usa `preload()` antes de montar la consulta. Las mutaciones directas esperan `when('settled')`, comprobando también rechazo y rollback ante cuota agotada. Se exige Storage real para que la interfaz no prometa persistencia si solo existe memoria.
+
+En 05 se contrastaron `query-db-collection/src/query.ts`, las propiedades virtuales y `reload()` del core RC1, además de las APIs publicadas de MSW 2.15.0. Se usan `queryCollectionOptions` con `createCollection`, un QueryClient concreto y refetch explícito dentro del handler. Las pruebas verifican `$hasPendingWrites` proyectado como `pending`, optimismo, reconciliación, fallo posterior al commit y recuperación sin repetir la escritura. El worker se espera antes de montar lectores y se activa también en el build del tutorial.
 
 ## Fuentes para implementar cada bloque
 

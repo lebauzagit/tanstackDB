@@ -27,7 +27,7 @@ export const lessons = [
     number: '05',
     title: 'La API tarda, la interfaz responde',
     level: 'Intermedio',
-    path: null,
+    path: '/lessons/05-remote-tasks',
   },
   {
     number: '06',

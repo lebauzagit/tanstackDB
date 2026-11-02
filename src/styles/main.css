@@ -1261,3 +1261,127 @@ main {
     padding-top: 24px;
   }
 }
+.remote-disclosure {
+  margin: 0;
+  padding: 20px 24px;
+  background: var(--ochre-wash);
+  border-bottom: 1px solid var(--rule);
+  color: var(--ink);
+}
+.remote-controls {
+  padding: 24px;
+  border-bottom: 1px solid var(--rule);
+}
+.remote-controls label {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+  font-weight: 600;
+}
+.remote-controls select {
+  font: inherit;
+  padding: 8px 12px;
+  background: var(--sheet);
+  color: var(--ink);
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+}
+.remote-controls .field-hint {
+  margin: 16px 0 0;
+}
+.remote-summary {
+  padding: 20px 24px;
+  background: var(--leaf-wash);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: space-between;
+  font-size: 0.875rem;
+}
+.remote-panels {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  padding: 24px;
+  gap: 24px;
+}
+.remote-panel {
+  min-width: 0;
+}
+.remote-panel + .remote-panel {
+  border-left: 1px solid var(--rule);
+  padding-left: 24px;
+}
+.remote-panel h3 {
+  margin: 12px 0;
+}
+.remote-panel .json-view {
+  width: 100%;
+  max-height: 340px;
+}
+.pending-badge {
+  font-size: 0.75rem;
+  color: var(--ochre);
+  background: var(--ochre-wash);
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+.request-inspector,
+.remote-timeline {
+  padding: 24px;
+  border-top: 1px solid var(--rule);
+}
+.request-table-scroll {
+  overflow-x: auto;
+}
+.request-inspector table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+.request-inspector caption {
+  text-align: left;
+  padding-bottom: 12px;
+  color: var(--pencil);
+}
+.request-inspector th,
+.request-inspector td {
+  text-align: left;
+  padding: 12px 8px;
+  border-bottom: 1px solid var(--rule);
+}
+.remote-timeline ol {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  max-height: 360px;
+  overflow-y: auto;
+}
+.remote-timeline li {
+  display: grid;
+  grid-template-columns: 160px 1fr;
+  gap: 16px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--rule);
+  font-size: 0.875rem;
+}
+.timeline-time {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  color: var(--pencil);
+}
+@media (max-width: 900px) {
+  .remote-panels {
+    grid-template-columns: 1fr;
+  }
+  .remote-panel + .remote-panel {
+    border-left: 0;
+    border-top: 1px solid var(--rule);
+    padding-left: 0;
+    padding-top: 24px;
+  }
+  .remote-timeline li {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+}
