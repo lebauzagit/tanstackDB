@@ -187,8 +187,8 @@ const files = [
     <div class="lesson-end">
       <RouterLink class="text-link" to="/lessons/03-shared-collection"
         >← Lección 03: dos vistas compartidas</RouterLink
-      ><span class="quiet"
-        >Próxima práctica: API y latencia · En preparación</span
+      ><RouterLink class="text-link" to="/lessons/05-remote-tasks"
+        >Lección 05: API y latencia →</RouterLink
       >
     </div>
   </article>

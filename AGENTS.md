@@ -4,7 +4,7 @@
 
 Este proyecto enseña TanStack DB 1.0.0-rc.1 con Vue 3, TypeScript y composables. La claridad pedagógica es un requisito funcional. Un CRUD que funciona pero no explica su flujo de datos está incompleto.
 
-La base Vue y las lecciones 01–04 están instaladas y pasan typecheck, lint, cuarenta pruebas y build. Las cuatro tienen revisión en Chrome DevTools de escritorio y móvil; los hallazgos de foco de 02/03 están corregidos. Los hitos 1 y 2 están completos. Lee los registros del [hito 1](docs/06-estado-hito-1.md), la [lección 02](docs/07-estado-leccion-02.md), la [lección 03](docs/08-estado-leccion-03.md), el [informe visual](docs/09-revision-visual.md) y la [lección 04](docs/10-estado-leccion-04.md). No describas comprobaciones pendientes como realizadas ni lecciones futuras como implementadas.
+La base Vue y las lecciones 01–05 están instaladas y pasan typecheck, lint, cincuenta pruebas y build. Las cinco tienen revisión de escritorio/móvil; 05 también se verificó en Vite Preview con el worker real. Los hitos 1 y 2 están completos; el hito 3 conserva pendiente la lección 06. Lee los registros del [hito 1](docs/06-estado-hito-1.md), la [lección 02](docs/07-estado-leccion-02.md), la [lección 03](docs/08-estado-leccion-03.md), el [informe visual](docs/09-revision-visual.md), la [lección 04](docs/10-estado-leccion-04.md) y la [lección 05](docs/11-estado-leccion-05.md). No describas comprobaciones pendientes como realizadas ni lecciones futuras como implementadas.
 
 Lee antes de implementar, en este orden:
 
@@ -25,6 +25,7 @@ Lee antes de implementar, en este orden:
 - No atribuyas a DB persistencia remota, autorización, resolución de conflictos ni trabajo offline duradero sin una implementación concreta.
 - Cada lección debe poder reiniciarse sin alterar los datos de otras lecciones.
 - La lección 04 usa solo `taller-db:lesson-04:tasks:v1` para persistencia. Conserva la diferencia entre clave ausente y lista guardada vacía; no uses `localStorage.clear()` ni sustituyas fallos de almacenamiento por memoria sin indicarlo.
+- La API de 05 es una simulación MSW con estado propio, identificada en pantalla. Arranca bajo demanda, también en el build estático. Conserva IDs de sesión en rutas/caché, abortos y la separación entre datos de DB y del mock. No atribuyas confirmación remota únicamente a `$hasPendingWrites` o a la casilla marcada.
 
 ## Reglas de implementación
 

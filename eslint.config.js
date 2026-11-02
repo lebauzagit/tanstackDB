@@ -10,6 +10,7 @@ export default ts.config(
       'node_modules/**',
       '.pnpm-store/**',
       '.codebase-memory/**',
+      'public/mockServiceWorker.js', // Generado por el CLI oficial de MSW.
     ],
   },
   js.configs.recommended,

@@ -8,9 +8,9 @@ Repositorio privado: [lebauzagit/tanstackDB](https://github.com/lebauzagit/tanst
 
 ## Estado actual
 
-**Lecciones 01–04 implementadas y verificadas.** Incluyen primera colección, filtros reactivos, fuente compartida y CRUD con comparación entre memoria y almacenamiento del navegador. Las lecciones 05–10 aparecen como «En preparación».
+**Lecciones 01–05 implementadas y verificadas.** Incluyen primera colección, filtros reactivos, fuente compartida, CRUD/persistencia local y API HTTP simulada con latencia y escrituras optimistas. Las lecciones 06–10 aparecen como «En preparación».
 
-Las dependencias están instaladas y `pnpm-lock.yaml` conserva las versiones resueltas. Pasan typecheck, lint, las cuarenta pruebas y build. Las cuatro lecciones se revisaron con Chrome DevTools en escritorio y móvil emulado. Los detalles de foco de 02/03 están corregidos; consulta el [informe de revisión](docs/09-revision-visual.md) y el [registro de la lección 04](docs/10-estado-leccion-04.md).
+Las dependencias están instaladas y `pnpm-lock.yaml` conserva las versiones resueltas. Pasan typecheck, lint, las cincuenta pruebas y build. Las cinco lecciones se revisaron con Chrome DevTools en escritorio y móvil emulado. Los detalles de foco de 02/03 están corregidos; consulta el [informe de revisión](docs/09-revision-visual.md), la [lección 04](docs/10-estado-leccion-04.md) y la [lección 05](docs/11-estado-leccion-05.md).
 
 ## Ejecutar el proyecto
 
@@ -35,6 +35,8 @@ La tercera está en `/lessons/03-shared-collection`. Permite editar y completar 
 
 La cuarta está en `/lessons/04-storage`. Compara CRUD sobre dos listas independientes: una en memoria y otra persistida con el adaptador oficial localStorage de DB RC1. Recargar permite comprobar qué sobrevive; reiniciar repone ambas semillas y solo elimina la clave de esta práctica.
 
+La quinta está en `/lessons/05-remote-tasks`. Compara cliente y API simulada durante PATCH + GET, con latencias de 0/500/1500 ms, peticiones y cronología. MSW arranca bajo demanda y necesita un origen que permita service workers, como localhost/127.0.0.1 o HTTPS. La simulación también funciona en el build estático y está identificada como tal.
+
 El lockfile ya está generado y debe conservarse en el repositorio. Usa `pnpm install --frozen-lockfile` para reproducir las versiones verificadas.
 
 ## Comprobaciones
@@ -46,7 +48,7 @@ pnpm test
 pnpm build
 ```
 
-Las cuarenta pruebas pasan. Cubren DB real, filtros, proyección, estado compartido, edición, CRUD, reapertura del almacenamiento, vacío persistido, errores de almacenamiento, rollback, reinicio, aislamiento, navegación y recuperación del foco. Consulta los registros del [hito 1](docs/06-estado-hito-1.md), la [lección 02](docs/07-estado-leccion-02.md), la [lección 03](docs/08-estado-leccion-03.md), la [revisión inicial en navegador](docs/09-revision-visual.md) y la [lección 04](docs/10-estado-leccion-04.md) para distinguir las comprobaciones y sus límites.
+Las cincuenta pruebas pasan. Cubren DB real, filtros, proyección, estado compartido, CRUD, persistencia local, HTTP simulado con MSW real, optimismo, reconciliación, rollback, errores, reinicio, aislamiento, navegación y foco. Consulta los registros del [hito 1](docs/06-estado-hito-1.md), la [lección 02](docs/07-estado-leccion-02.md), la [lección 03](docs/08-estado-leccion-03.md), la [revisión inicial en navegador](docs/09-revision-visual.md), la [lección 04](docs/10-estado-leccion-04.md) y la [lección 05](docs/11-estado-leccion-05.md) para distinguir las comprobaciones y sus límites.
 
 ## La idea
 
@@ -74,6 +76,7 @@ En Taller DB aprenderemos esa frontera usando primero memoria local y después u
 | [Estado de la lección 03](docs/08-estado-leccion-03.md) | Fuente compartida, dos componentes y alternativa Vue |
 | [Revisión en navegador](docs/09-revision-visual.md) | Escritorio, móvil, escenarios comprobados y mejoras de foco |
 | [Estado de la lección 04](docs/10-estado-leccion-04.md) | CRUD, persistencia local, recuperación y cierre del hito 2 |
+| [Estado de la lección 05](docs/11-estado-leccion-05.md) | HTTP simulado, latencia, reconciliación y cancelación |
 | [Instrucciones del agente](AGENTS.md) | Cómo trabajar en este proyecto sin perder su propósito educativo |
 
 ## Decisiones iniciales
@@ -88,4 +91,4 @@ Son decisiones de diseño para este proyecto, no requisitos de TanStack DB. Las 
 
 ## Próxima entrega definida
 
-La siguiente lección del [plan](docs/04-plan-de-implementacion.md) es la 05: Query Collection y API HTTP simulada con latencia. Los hitos 1 y 2 están completos.
+La siguiente lección del [plan](docs/04-plan-de-implementacion.md) es la 06: errores controlados, rollback y recuperación. Los hitos 1 y 2 están completos; el hito 3 tiene terminada la lección 05.

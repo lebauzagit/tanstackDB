@@ -1,6 +1,6 @@
 # Arquitectura propuesta
 
-Este documento define el diseño del recorrido. La base Vue y las lecciones 01–04 están implementadas, instaladas y verificadas automáticamente y en navegador, incluidas las correcciones de foco recogidas en la [revisión visual](09-revision-visual.md) y el CRUD/persistencia de la [lección 04](10-estado-leccion-04.md). El resto sigue planificado. Las rutas, funciones y contratos HTTP propuestos son propios de Taller DB.
+Este documento define el diseño del recorrido. La base Vue y las lecciones 01–05 están implementadas, instaladas y verificadas automáticamente y en navegador. Véanse la [revisión visual](09-revision-visual.md), el CRUD/persistencia de [04](10-estado-leccion-04.md) y la API simulada de [05](11-estado-leccion-05.md). Las lecciones 06–10 siguen planificadas. Las rutas, funciones y contratos HTTP propuestos son propios de Taller DB.
 
 ## Decisiones de base
 
@@ -81,7 +81,8 @@ Al reiniciar: bloquear temporalmente controles, abortar peticiones, desmontar co
 | `useVueTaskExample()` | Sin argumentos; semilla Vue independiente | Alternativa didáctica con `ref` y `computed`, sin duplicar las filas de DB |
 | `useTasks()` | Colección concreta de la lección 04 | Consulta viva de tareas ordenadas por ID |
 | `useTaskActions()` | Colección concreta de la lección 04 | Validar título, crear, editar, alternar estado y eliminar; esperar settlement |
-| `useRemoteTasks()` | sesión y filtros | Lectura conectada a HTTP |
+| `useRemoteTasks()` | Sesión concreta de la lección 05 | Consulta viva, alternar estado con settlement, lectura manual y errores HTTP |
+| `useLabInspector()` | Estado autoritativo del mock | Leer datos, peticiones y cronología independientes de DB |
 | `useProjectBoard()` | sesión y proyecto reactivo | Proyección relacional para el tablero |
 | `useProjectMetrics()` | sesión y alcance | Métricas con cobertura explícita |
 | `useCompleteTask()` | sesión | Coordinar intención y actividad |
@@ -95,6 +96,8 @@ Las dos primeras lecciones conservan sus fábricas y semillas locales para que c
 En la lección 03, `SharedPlayground.vue` es propietario de una única colección y la pasa a `AllTasksView` y `PendingTasksView`. Cada hijo abre su consulta mediante su composable. `TaskEditorRow` conserva únicamente el borrador del formulario y usa acciones sobre la fuente. Desmontar un hijo libera su lector; desmontar el propietario libera la colección y sus consultas dependientes. La comparación con Vue mantiene datos propios y está identificada como ejemplo independiente.
 
 En la lección 04, `StoragePlayground.vue` posee dos fuentes independientes: LocalOnly y LocalStorage. La segunda se abre y valida antes de montar su lector `TaskList.vue`. Ambos lectores usan los mismos composables concretos de consulta y CRUD. El reinicio bloquea acciones, desmonta lectores, espera cleanup, elimina solo `taller-db:lesson-04:tasks:v1` y recrea las fuentes. Los fallos de apertura de B dejan A disponible; una apertura que termina tras desmontar su propietario libera inmediatamente la nueva fuente.
+
+En 05, `RemotePlayground.vue` espera el arranque diferido del worker y posee una sesión concreta con QueryClient, colección y API simulada. El lector recibe esa fuente estable. Reiniciar cierra el mock y aborta escrituras, desmonta el lector, cancela consultas y limpia la colección antes de recrearla. Rutas y query keys incluyen un ID nuevo. `TaskLab` conserva sus propios datos y publica cambios para el inspector, sin leer DB.
 
 Usar `MaybeRefOrGetter` solo donde aporte utilidad; comprobar cómo el adaptador sigue refs/getters. Evitar convertir una entrada reactiva en un valor fijo al crear el composable. No añadir watchers para duplicar filas en arrays.
 
@@ -117,6 +120,8 @@ Las primeras lecciones solo usan los tres campos iniciales de Task. El mock remo
 
 Base propuesta: `/api/lab/:sessionId`. Todas las rutas son de este proyecto.
 
+Estado actual de 05: solo GET `/tasks` con `{ items, total }` y PATCH `/tasks/:id` con `{ completed: boolean }`, que devuelve la tarea confirmada. La tabla siguiente describe la ampliación prevista; filtros, `expectedVersion`, autenticación y operaciones coordinadas no están implementados en esta lección.
+
 | Método y ruta relativa | Contrato |
 | --- | --- |
 | `GET /tasks` | `{ items, total }`; acepta proyecto, completada, orden, límite y offset |
@@ -136,7 +141,7 @@ La acción de completar valida toda la intención antes de escribir. Mantiene un
 
 ## Semántica de red y consistencia
 
-Query Collection conecta la carga mediante Query con colecciones DB. Su integración y opciones se verifican en la [guía oficial](https://tanstack.com/db/latest/docs/collections/query-collection). El proyecto empezará con refetch explícito tras escritura y después podrá comparar aplicación de la respuesta autoritativa.
+Query Collection conecta la carga mediante Query con colecciones DB. Su integración y opciones se verifican en la [guía oficial](https://tanstack.com/db/latest/docs/collections/query-collection) y la fuente instalada. La lección 05 usa refetch explícito tras escritura: `onUpdate` espera PATCH y `collection.utils.refetch({ throwOnError: true })`. Query tiene retry desactivado, staleTime infinito y refetch por foco/reconexión desactivado para reproducir el experimento. La aplicación de respuestas autoritativas por escritura directa podrá compararse después.
 
 Para concurrencia, una versión obsoleta produce 409 antes de modificar datos. La acción del otro actor cambia solo el mock; la lección debe mostrar la recarga que trae ese cambio al cliente.
 
